@@ -67,7 +67,10 @@ class App(tk.Tk):
 
 # This is the window which will have the entry fields needed for the START file.
 class ExcelWindow(tk.Toplevel):
+    # Variables
     opt_entries = []
+
+
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -116,7 +119,7 @@ class ExcelWindow(tk.Toplevel):
     # Function to add new option to the entry
     def AddOptions(self):
         global opt_count
-        MAX_OPTIONS = 6
+        MAX_OPTIONS = 7
         if opt_count < MAX_OPTIONS:
             opt_label = tk.Label(self, text = 'Option ' + str(opt_count + 1), font = ('calibre',10,'bold'))
             opt_label.grid(row=2 + opt_count,column=2)
