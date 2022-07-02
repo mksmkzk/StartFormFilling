@@ -71,9 +71,10 @@ class ExcelProcessor:
         self.FW.range('H' + str(9 + self.fw_row)).value = data[5]
 
         # Set the options
-        print(data[6])
+        # Have to redo how i loop through this data to add the options.
         if data[6]:
             for slab_option in data[6][0]:
+                print(slab_option)
                 if slab_option.current() != -1:
                     self.slab_row += 1
                     self.SLABS.range('F' + str(9 + self.slab_row) + ":I" + str(9 + self.slab_row)).value = self.slabPlans[slab_option.current()]
@@ -140,6 +141,7 @@ class ExcelWindow(tk.Toplevel):
         address_label = tk.Label(self, text = 'Address', font = ('calibre',10,'bold'))
         address_entry=tk.Entry(self, textvariable = address_var, font = ('calibre',10,'normal'))
 
+        # Todo: Add the elevation to the main window
         elv_label = tk.Label(self, text = 'ELV', font = ('calibre',10,'bold'))
         elv_entry=tk.Entry(self, textvariable = elv_var, font = ('calibre',10,'normal'))
 
@@ -177,6 +179,8 @@ class ExcelWindow(tk.Toplevel):
         # creating a list of the values to be added to the excel sheet
         values = [lot.get(), address.get().upper(), gar_orr, 
                   slab_plan, fw_plan, elv.get().upper(), self.opt_entries]
+        
+        print(values)
 
         # adding the values to the excel sheet
         app.document.InputData(values)
