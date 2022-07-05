@@ -157,28 +157,37 @@ class ExcelWindow(tk.Toplevel):
         # creating a button using the widget
         done_btn=tk.Button(self,text = 'Done', command = self.Close)
         add_opt_btn=tk.Button(self,text = 'Add Options', command = self.AddOptions)
-        add_lot_btn=tk.Button(self,text = 'Add Lot', command = lambda: self.AddLot(lot_var, address_var, elv_var, gar_orr_combo.get(), slab_plan_combo.current(), fw_plan_combo.current()))
+        add_cust_opt_btn=tk.Button(self,text = 'Custom Option', command = self.AddCustomOption)
+        add_lot_btn=tk.Button(self,text = 'Add Lot', command = lambda: self.AddLot(lot_var.get(), address_var.get().upper(),
+                                                                                    elv_var.get().upper(), gar_orr_combo.get(),
+                                                                                    slab_plan_combo.current(), fw_plan_combo.current()))
 
         # Placing the entries and button in a grid
         lot_label.grid(row=0,column=0)
-        lot_entry.grid(row=1,column=0)
-        address_label.grid(row=0,column=1)
+        address_label.grid(row=1,column=0)
+        elv_label.grid(row=2,column=0)
+        gar_orr_label.grid(row=3,column=0)
+
+        lot_entry.grid(row=0,column=1)
         address_entry.grid(row=1,column=1)
-        gar_orr_label.grid(row=0,column=2)
-        gar_orr_combo.grid(row=1,column=2)
+        elv_entry.grid(row=2,column=1)
+        gar_orr_combo.grid(row=3,column=1)
+
         slab_plan_label.grid(row=0,column=3)
         slab_plan_combo.grid(row=1,column=3)
         fw_plan_label.grid(row=0,column=4)
         fw_plan_combo.grid(row=1,column=4)
-        add_opt_btn.grid(row=2,column=1)
+
+        add_cust_opt_btn.grid(row=1,column=2)
+        add_opt_btn.grid(row=0,column=2)
         add_lot_btn.grid(row=20,column=4, pady = 200)
         done_btn.grid(row=20,column=5, pady = 200)
 
     # Function to add the entry fields into excel
     def AddLot(self, lot, address, elv, gar_orr, slab_plan, fw_plan):
         # creating a list of the values to be added to the excel sheet
-        values = [lot.get(), address.get().upper(), gar_orr, 
-                  slab_plan, fw_plan, elv.get().upper(), self.opt_entries]
+        values = [lot, address, gar_orr, slab_plan,
+                  fw_plan, elv, self.opt_entries]
         
         print(values)
 
@@ -198,9 +207,87 @@ class ExcelWindow(tk.Toplevel):
             self.opt_entries[-1][1].grid(row=2+ self.opt_count,column=4)
             self.opt_count += 1
 
+    def AddCustomOption(self):
+        window = CustomOptionWindow(self)
+
     # Function to close the window
     def Close(self):
         self.destroy()
+
+# The window for adding custom options to the list
+class CustomOptionWindow(tk.Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.title("Add Custom Option") 
+        self.geometry("600x200")
+
+        # creating the variables entry fields
+        plan_var= tk.StringVar()
+        sage_elv_var= tk.StringVar()
+        elv_var= tk.StringVar()
+        cost_var= tk.StringVar()
+
+        # creating the labels and entry fields
+        plan_label = tk.Label(self, text = 'Plan', font=('calibre',10, 'bold'))
+        plan_entry = tk.Entry(self,textvariable = plan_var, font=('calibre',10,'normal'))
+
+        sage_elv_label = tk.Label(self, text = 'SAGE ELV', font = ('calibre',10,'bold'))
+        sage_elv_entry=tk.Entry(self, textvariable = sage_elv_var, font = ('calibre',10,'normal'))
+
+        elv_label = tk.Label(self, text = 'ELV', font = ('calibre',10,'bold'))
+        elv_entry=tk.Entry(self, textvariable = elv_var, font = ('calibre',10,'normal'))
+
+        cost_label = tk.Label(self, text = 'Cost', font = ('calibre',10,'bold'))
+        cost_entry=tk.Entry(self, textvariable = cost_var, font = ('calibre',10,'normal'))
+
+        # creating a button using the widget
+        slab_done_btn=tk.Button(self,text = 'Add to Slab', command = lambda : self.AddNewSlabOption(plan_var.get(), sage_elv_var.get(), elv_var.get(), cost_var.get()))
+        fw_done_btn=tk.Button(self,text = 'Add to FW', command = lambda : self.AddNewFWOption(plan_var.get(), sage_elv_var.get(), elv_var.get(), cost_var.get()))
+
+        # Placing the entries and button in a grid
+        plan_label.grid(row=0,column=0)
+        plan_entry.grid(row=1,column=0)
+        sage_elv_label.grid(row=0,column=1)
+        sage_elv_entry.grid(row=1,column=1)
+        elv_label.grid(row=0,column=2)
+        elv_entry.grid(row=1,column=2)
+        cost_label.grid(row=0,column=3)
+        cost_entry.grid(row=1,column=3)
+        slab_done_btn.grid(row=2,column=2)
+        fw_done_btn.grid(row=2,column=3)
+
+
+    # Function to add the entry fields into the list of slab options
+    def AddNewSlabOption(self, plan, sage_elv, elv, cost):
+        # creating a list of the values to be added to the excel sheet
+        values = [plan, sage_elv, elv, cost]
+        
+        print(values)
+
+        # adding the values to the excel sheet
+        app.document.slabPlans.append(values)
+
+        # closing the window
+        self.destroy()    
+
+    # Function to add the entry fields into the list of slab options
+    def AddNewFWOption(self, plan, sage_elv, elv, cost):
+        # creating a list of the values to be added to the excel sheet
+        values = [plan, sage_elv, elv, cost]
+        
+        print(values)
+
+        # adding the values to the excel sheet
+        app.document.fwPlans.append(values)
+
+        # closing the window
+        self.destroy()  
+
+
+
+
+
 
 app = App()
 app.mainloop()
