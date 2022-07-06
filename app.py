@@ -42,7 +42,16 @@ class ExcelProcessor:
             if self.FW.range('F' + str(i)).value is not None:
                 self.fwPlans.append(self.FW.range('F' + str(i) + ":I" + str(i)).value)
 
-    # def AddCustomOption(self, data, )
+    # Function to add custom plans to the correct plans list
+    def AddCustomOption(self, data, type):
+        if type == 'slab':
+            self.slabPlans.append(data)
+            print('In AddCustomOption')
+            print(self.slabPlans)
+        elif type == 'fw':
+            self.fwPlans.append(data)
+            print('In AddCustomOption')
+            print(self.fwPlans)
 
     # Function to input the data into the excel sheet
     def InputData(self, data):
@@ -191,8 +200,6 @@ class ExcelWindow(tk.Toplevel):
         # creating a list of the values to be added to the excel sheet
         values = [lot, address, gar_orr, slab_plan,
                   fw_plan, elv, self.opt_entries]
-        
-        print(values)
 
         # adding the values to the excel sheet
         app.document.InputData(values)
@@ -265,12 +272,10 @@ class CustomOptionWindow(tk.Toplevel):
     def AddNewSlabOption(self, plan, sage_elv, elv, cost):
         # creating a list of the values to be added to the excel sheet
         values = [plan, sage_elv, elv, cost]
-        
-        print(values)
 
         # adding the values to the excel sheet
-        app.document.slabPlans.append(values)
-
+        app.document.AddCustomOption(values, 'slab')
+        print('In AddNewSlabOption')
         print(app.document.fwPlans)
 
         # closing the window
@@ -280,11 +285,11 @@ class CustomOptionWindow(tk.Toplevel):
     def AddNewFWOption(self, plan, sage_elv, elv, cost):
         # creating a list of the values to be added to the excel sheet
         values = [plan, sage_elv, elv, cost]
-        
-        print(values)
 
         # adding the values to the excel sheet
-        app.document.fwPlans.append(values)
+        app.document.AddCustomOption(values, 'fw')
+
+        print('In AddNewSlabOption')
 
         print(app.document.fwPlans)
 
