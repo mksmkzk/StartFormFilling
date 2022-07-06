@@ -42,6 +42,8 @@ class ExcelProcessor:
             if self.FW.range('F' + str(i)).value is not None:
                 self.fwPlans.append(self.FW.range('F' + str(i) + ":I" + str(i)).value)
 
+    # def AddCustomOption(self, data, )
+
     # Function to input the data into the excel sheet
     def InputData(self, data):
 
@@ -74,12 +76,11 @@ class ExcelProcessor:
         # Have to redo how i loop through this data to add the options.
         if data[6]:
             for slab_option in data[6][0]:
-                print(slab_option)
-                if slab_option.current() != -1:
+                if slab_option.current() != -1 and slab_option.current() != 0:
                     self.slab_row += 1
                     self.SLABS.range('F' + str(9 + self.slab_row) + ":I" + str(9 + self.slab_row)).value = self.slabPlans[slab_option.current()]
             for fw_option in data[6][1]:
-                if fw_option.current() != -1:
+                if fw_option.current() != -1 and fw_option.current() != 0:
                     self.fw_row += 1
                     self.FW.range('F' + str(9 + self.fw_row) + ":I" + str(9 + self.fw_row)).value = self.fwPlans[fw_option.current()]    
 
@@ -99,6 +100,8 @@ class App(tk.Tk):
 
         self.title("Load Excel File")
         self.geometry("200x50")
+        
+        # TODO: Add entry fields for job#, subjob #, Supervisor, and pour type
 
         load_file_label = tk.Label(self, text="Select START to Load")
         load_file_label.pack()
