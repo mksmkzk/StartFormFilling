@@ -18,8 +18,8 @@ class ExcelProcessor:
     FW = None
 
     # List of plans that are available for the SLAB and FW
-    slabPlans = []
-    fwPlans = []
+    slabPlans = [[]]
+    fwPlans = [[]]
 
     # Keep track of the current row in each sheet
     slab_row = 0
@@ -268,6 +268,8 @@ class CustomOptionWindow(tk.Toplevel):
         # adding the values to the excel sheet
         app.document.slabPlans.append(values)
 
+        print(app.document.fwPlans)
+
         # closing the window
         self.destroy()    
 
@@ -281,11 +283,10 @@ class CustomOptionWindow(tk.Toplevel):
         # adding the values to the excel sheet
         app.document.fwPlans.append(values)
 
+        print(app.document.fwPlans)
+
         # closing the window
         self.destroy()  
-
-
-
 
 
 
