@@ -12,25 +12,22 @@ import xlwings as xw
 
 # Class to do all excel processing
 class ExcelProcessor:
-    # Variables
-    START = None
-    SLABS = None
-    FW = None
-
-    # List of plans that are available for the SLAB and FW
-    slabPlans = [[]]
-    fwPlans = [[]]
-
-    # Keep track of the current row in each sheet
-    slab_row = 0
-    fw_row = 0
-
     # constructor
     def __init__(self, file_path):
         self.START = xw.Book(file_path)
         self.SLABS = self.START.sheets['START-SLABS']
         self.FW = self.START.sheets['START-FW']
+
+        # List of plans that are available for the SLAB and FW
+        self.slabPlans = [[]]
+        self.fwPlans = [[]]
+
+        # Keep track of the current row in each sheet
+        self.slab_row = 0
+        self.fw_row = 0
+
         self.SetPlans()
+
 
     # Function to get the SLAB and FW plan from the START excel sheet
     def SetPlans(self):
@@ -46,12 +43,8 @@ class ExcelProcessor:
     def AddCustomOption(self, data, type):
         if type == 'slab':
             self.slabPlans.append(data)
-            print('In AddCustomOption')
-            print(self.slabPlans)
         elif type == 'fw':
             self.fwPlans.append(data)
-            print('In AddCustomOption')
-            print(self.fwPlans)
 
     # Function to input the data into the excel sheet
     def InputData(self, data):
@@ -101,14 +94,15 @@ class ExcelProcessor:
 
 # Main window which will have you select the start file to load.
 class App(tk.Tk):
-
-    document = None
-
+    # Constructor
     def __init__(self):
         super().__init__()
 
         self.title("Load Excel File")
         self.geometry("200x50")
+
+        # Instance of the ExcelProcessor class
+        self.document = None
         
         # TODO: Add entry fields for job#, subjob #, Supervisor, and pour type
 
@@ -130,10 +124,6 @@ class App(tk.Tk):
 
 # This is the window which will have the entry fields needed for the START file.
 class ExcelWindow(tk.Toplevel):
-    # Variables
-    opt_entries = []
-
-    opt_count = 0
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -144,6 +134,10 @@ class ExcelWindow(tk.Toplevel):
         lot_var= tk.StringVar()
         address_var= tk.StringVar()
         elv_var= tk.StringVar()
+
+        # Variables to track the options
+        self.opt_entries = []
+        self.opt_count = 0
         
         gar_orr_options = ['LEFT', 'RIGHT']
 
@@ -275,8 +269,6 @@ class CustomOptionWindow(tk.Toplevel):
 
         # adding the values to the excel sheet
         app.document.AddCustomOption(values, 'slab')
-        print('In AddNewSlabOption')
-        print(app.document.fwPlans)
 
         # closing the window
         self.destroy()    
@@ -288,10 +280,6 @@ class CustomOptionWindow(tk.Toplevel):
 
         # adding the values to the excel sheet
         app.document.AddCustomOption(values, 'fw')
-
-        print('In AddNewSlabOption')
-
-        print(app.document.fwPlans)
 
         # closing the window
         self.destroy()  
