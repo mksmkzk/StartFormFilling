@@ -37,4 +37,4 @@ At the current moment, I do not have access to the Database.
 
 I noticed that the Lot and Address information is populated through EoS. Will this information be filled out ahead of time?
 
-N
+Will the FW stuff be filled out before hand or will it be done as a seperate job.
